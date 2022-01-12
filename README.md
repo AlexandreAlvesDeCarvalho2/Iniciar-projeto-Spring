@@ -46,19 +46,19 @@ public class ContactController {
 
 methods
 
-	@GetMapping
+@GetMapping
 public List findAll(){
   return repository.findAll();
 }
 
-(
+
 @GetMapping(path = {"/{id}"})
 public ResponseEntity<Contact> findById(@PathVariable long id){
   return repository.findById(id)
           .map(record -> ResponseEntity.ok().body(record))
           .orElse(ResponseEntity.notFound().build());
 }
-)
+
 
 
 @PostMapping
