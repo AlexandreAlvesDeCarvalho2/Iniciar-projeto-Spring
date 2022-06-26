@@ -94,3 +94,66 @@ deletar
                 return ResponseEntity.ok().build();
             }).orElse(ResponseEntity.notFound().build());
       }
+      
+      
+-=-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-==-=--=-=
+Até aqui já funciona o código, caso queira implementar o DTO e Service siga os proximos passos.
+
+Criar Classe DTO, colocar somente os atributos que irá passar ao usuário.
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    public class UsuarioDTO {
+
+        private Long id;
+        private String name;
+        private String email;
+
+
+        public UsuarioDTO(Usuario usuario){
+            id = usuario.getId();
+            name = usuario.getName();
+            email = usuario.getEmail();        
+        }
+
+    }
+
+Criar Classe Service, para converter a entidade em DTO. 
+
+    @Service
+    public class UsuarioService {
+
+        @Autowired
+        private UsuarioRepository repository;
+
+        public List<UsuarioDTO> buscarTodosDto(){
+            return repository.findAll()
+            .stream()
+            .map(this::convertEntityToDto)
+            .collect(Collectors.toList());
+
+        }
+           private UsuarioDTO convertEntityToDto(Usuario usuario){
+                UsuarioDTO usuarioDTO = new UsuarioDTO();
+                usuarioDTO.setId(usuario.getId());
+                usuarioDTO.setName(usuario.getName());
+                usuarioDTO.setEmail(usuario.getEmail());
+
+           return usuarioDTO;
+       }
+
+modificar o metodo do controlador 
+
+    @GetMapping
+    public List<UsuarioDTO> buscarTodosDTO(){
+        return serviceRepository.buscarTodosDto();
+    }
+
+
+
+
+
+
+
+Alexandre Alves de Carvalho
